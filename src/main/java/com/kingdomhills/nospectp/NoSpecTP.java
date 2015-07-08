@@ -16,13 +16,14 @@ public class NoSpecTP extends JavaPlugin implements Listener {
 	public void onEnable() {
 		saveDefaultConfig();
 		dnymsg = getConfig().getString("deny-msg");
+		getServer().getPluginManager().registerEvents(this, this);
 	} 
 	
 	@EventHandler
 	public void onTP(PlayerTeleportEvent e) {
+		Player player = e.getPlayer();
 		if (e.getCause().equals(TeleportCause.SPECTATE)) {
-			Player player = e.getPlayer();
-			if (!player.isOp() && !player.hasPermission("nospectp.*") && player.hasPermission("nospectp." + e.getTo().getWorld().getName())) {
+			if (!player.isOp() && !player.hasPermission("nospectp.*") && !player.hasPermission("nospectp." + e.getTo().getWorld().getName())) {
 				e.setCancelled(true);
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', dnymsg));
 			}
